@@ -1,1 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Trip Selector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto+Slab&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(-45deg, #6a11cb, #2575fc, #ff6a00, #ffcc00);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .theme-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-card:hover::after {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
+            animation: sparkle 0.5s forwards;
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        .place-button {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .place-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .fade {
+            animation: fadeIn 0.6s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon {
+            width: 25px;
+            height: 25px;
+            margin-right: 8px;
+            vertical-align: middle;
+            opacity: 0;
+            animation: iconEntrance 0.8s forwards;
+        }
+
+        @keyframes iconEntrance {
+            0% {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .step-indicator span {
+            font-weight: bold;
+        }
+
+        .step-indicator .current {
+            color: #ffcc00;
+        }
+
+        .back-button {
+            transition: transform 0.2s;
+        }
+
+        .back-button:active {
+            transform: scale(0.95) rotate(-10deg);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div id="main-container" class="bg-white p-6 rounded-2xl shadow-2xl max-w-md w-full fade">
+        <div class="step-indicator text-center mb-4 text-lg">
+            <span class="current">Step 1</span> → <span>Step 2</span> → <span>Step 3</span>
+        </div>
+        <h1 class="text-3xl font-bold text-center mb-6 text-purple-700">Choose Your Trip Theme</h1>
+        <div id="theme-list" class="grid gap-4"></div>
+
+        <div id="place-selection" class="hidden mt-4 fade">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-pink-700">Select a Place</h2>
+                <button class="back-button px-3 py-1 bg-gray-300 rounded hover:bg-gray-400" onclick="goBack()">Back</button>
+            </div>
+            <div id="places-list" class="grid gap-4"></div>
+        </div>
+
+        <div id="confirmation" class="hidden text-center mt-6 fade">
+            <h2 class="text-2xl font-bold text-purple-800">🎉 Ready for the Trip!</h2>
+            <p id="final-message" class="mt-2 text-lg"></p>
+            <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition">Start Over</button>
+        </div>
+    </div>
+
+    <audio id="notification-sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
+    <audio id="confetti-sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        const themes = [
+            { name: 'Temple Visit', icon: '🛕', desc: 'Where humanity meets divinity.', places: ['Isha Foundation Chikkaballapur 100mins drive. 6:30am to 1:00pm, 2:30pm to 8pm laser show.', 'Sri Venugopalaswamy temple KRS Mysore. 7am to 4pm', 'Devarayanadurga and Mahalaxmi temple. (Mane devaru) 8am to 4pm', 'Wondering something in BLR Art of living Kanakapura road. 8am to 12pm', 'Govardhana temple - Omkar hills - Malleshwaram temple - Venkateswara temple'] },
+            { name: 'Mall Visits', icon: '🏬', desc: 'No Akash, temples we can visit later and God is always kind to us.', places: ['Forum Mall','Mall of Asia','Pheonix Marketcity','Nexus mall Whitefield'] },
+            { name: 'Cafes & Restaurants', icon: '☕', desc: 'Akash we are in Bangalore and it would be crime not to visit amazing cafes.', places: ['Duy art cafe Indiranagar','Ironhill Marathahalli','Bologna - italian cafe','Si nonnas - Pizza','Tiot or Drunken daddy (dance floor)'] },
+            { name: 'Old Bangalore Visit', icon: '🏘️', desc: 'Enough is enough. Naanu mysore hudugi so I am interested in traditional old Bangalore vibes.', places: ['Jayanagar','Malleshwaram','MG road/ BLR Central','Gandhibazar','Vijaynagar'] },
+            { name: 'Adventure & Theme Park', icon: '🎢', desc: 'It\'s Friday Akash. Looking for some adventure and thrill.', places: ['Loco bear','Area 83','Jungle trailz','Mango mist resort','Kerekud homestay'] },
+            { name: 'Night Life', icon: '🌃', desc: 'Kelsa aadhmele we shall go out. I know Bangalore is open 24x7', places: ['Commercial Street','UB City along with Church Street','Drive to BLR airport and have a cup of coffee','VV Puram food Street'] },
+            { name: 'Only Long Drive', icon: '🚗', desc: 'Akash avare teach me car driving I already have licence.', places: ['Towards Mysore/coorg','Towards chitradurga','Towards Kolar','Towards Kanakapura'] },
+            { name: 'Waterfall', icon: '🌊', desc: 'Ree mungaru male nodilva neevu. I want contant talk in car along with devadasa to reach nearby waterfall.', places: ['Shivanasamudra - gaganachukki','Jog falls','Sathodi falls','Hogenakkal falls','Sakaleshpura'] }
+        ];
+
+        const themeListDiv = document.getElementById('theme-list');
+        const placesListDiv = document.getElementById('places-list');
+        const placeSelectionDiv = document.getElementById('place-selection');
+        const confirmationDiv = document.getElementById('confirmation');
+        const finalMessage = document.getElementById('final-message');
+        const notificationSound = document.getElementById('notification-sound');
+        const confettiSound = document.getElementById('confetti-sound');
+
+        let currentThemeIndex = null;
+
+        themes.forEach((theme, index) => {
+            const card = document.createElement('div');
+            card.className = 'theme-card p-4 rounded-xl shadow cursor-pointer text-white text-lg font-bold fade flex items-center';
+            const hue1 = Math.floor(Math.random()*360);
+            const hue2 = (hue1 + 60) % 360;
+            card.style.background = `linear-gradient(135deg, hsl(${hue1},70%,60%), hsl(${hue2},70%,70%))`;
+            card.innerHTML = `<span class="icon">${theme.icon}</span> <div><h3>${theme.name}</h3><p class='text-sm font-normal mt-1'>${theme.desc}</p></div>`;
+            card.onclick = () => showPlaces(index);
+            themeListDiv.appendChild(card);
+        });
+
+        function showPlaces(themeIndex) {
+            currentThemeIndex = themeIndex;
+            themeListDiv.classList.add('hidden');
+            placeSelectionDiv.classList.remove('hidden');
+            placeSelectionDiv.classList.add('fade');
+            placesListDiv.innerHTML = '';
+            const theme = themes[themeIndex];
+            theme.places.forEach(place => {
+                const placeBtn = document.createElement('button');
+                placeBtn.className = 'place-button w-full bg-pink-400 p-3 rounded shadow hover:bg-pink-500 transition font-bold fade';
+                placeBtn.innerText = place;
+                placeBtn.onclick = () => showConfirmation(themeIndex, place);
+                placesListDiv.appendChild(placeBtn);
+            });
+            updateStepIndicator(2);
+        }
+
+        function showConfirmation(themeIndex, placeName) {
+            placeSelectionDiv.classList.add('hidden');
+            confirmationDiv.classList.remove('hidden');
+            confirmationDiv.classList.add('fade');
+            const theme = themes[themeIndex];
+            finalMessage.innerText = `Awesome choice! We are heading towards "${placeName}" under the theme "${theme.name}". Get ready 😊`;
+            notificationSound.play();
+            confettiSound.play();
+            // Confetti with theme color
+            const hue1 = Math.floor(Math.random()*360);
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: [`hsl(${hue1}, 70%, 60%)`, `hsl(${(hue1+60)%360}, 70%, 70%)`, `#ffcc00`, `#ff6a00`]
+            });
+            updateStepIndicator(3);
+        }
+
+        function goBack() {
+            placeSelectionDiv.classList.add('hidden');
+            themeListDiv.classList.remove('hidden');
+            themeListDiv.classList.add('fade');
+            updateStepIndicator(1);
+        }
+
+        function updateStepIndicator(step) {
+            const spans = document.querySelectorAll('.step-indicator span');
+            spans.forEach((s, i) => s.classList.remove('current'));
+            spans[step - 1].classList.add('current');
+        }
+    </script>
+
+</body>
+
+</html>
 
