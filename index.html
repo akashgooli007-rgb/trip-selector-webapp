@@ -17,22 +17,25 @@ body {
   50% {background-position:100% 50%;}
   100% {background-position:0% 50%;}
 }
-.container {background:white;padding:20px;border-radius:15px;width:90%;max-width:400px;}
-h1,h2{color:#6a11cb;text-align:center;}
+.container {background:white;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:center;}
+h1,h2{color:#6a11cb;}
 .grid {display:grid;gap:10px;margin-top:15px;}
 button {padding:10px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:0.2s;}
 button:hover {transform:scale(1.05);}
 .hidden {display:none;}
+.description {margin-top:10px;color:#333;font-size:0.9em;}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Choose Your Trip Theme</h1>
+  <h2>Day out with Akash!!!</h2>
+  <h1 id="page-title">Choose Your Trip Theme</h1>
   <div id="theme-list" class="grid"></div>
 
   <div id="place-list-div" class="hidden">
     <h2>Select Place</h2>
     <div id="place-list" class="grid"></div>
+    <p id="theme-desc" class="description"></p>
     <button onclick="goBack()">Back</button>
   </div>
 
@@ -45,14 +48,14 @@ button:hover {transform:scale(1.05);}
 
 <script>
 const themes=[
-  {name:'Temple Visit',places:['Isha Foundation','Sri Venugopalaswamy','Devarayanadurga','Art of living','Govardhana']},
-  {name:'Mall Visits',places:['Forum Mall','Mall of Asia','Phoenix Marketcity','Nexus Mall']},
-  {name:'Cafes & Restaurants',places:['Duy Art Cafe','Ironhill','Bologna','Si Nonnas','Tiot/Drunken Daddy']},
-  {name:'Old Bangalore',places:['Jayanagar','Malleshwaram','MG Road','Gandhibazar','Vijaynagar']},
-  {name:'Adventure',places:['Loco Bear','Area 83','Jungle Trailz','Mango Mist','Kerekud']},
-  {name:'Night Life',places:['Commercial Street','UB City','Drive to Airport','VV Puram']},
-  {name:'Long Drive',places:['Mysore','Chitradurga','Kolar','Kanakapura']},
-  {name:'Waterfall',places:['Shivanasamudra','Jog Falls','Sathodi','Hogenakkal','Sakaleshpura']}
+  {name:'Temple Visit',desc:'Where humanity meets divinity.',places:['Isha Foundation','Sri Venugopalaswamy','Devarayanadurga','Art of living','Govardhana']},
+  {name:'Mall Visits',desc:'Visit malls to eat, talk and watch movies.',places:['Forum Mall','Mall of Asia','Phoenix Marketcity','Nexus Mall']},
+  {name:'Cafes & Restaurants',desc:'Explore amazing cafes in Bangalore.',places:['Duy Art Cafe','Ironhill','Bologna','Si Nonnas','Tiot/Drunken Daddy']},
+  {name:'Old Bangalore',desc:'Traditional old Bangalore vibes.',places:['Jayanagar','Malleshwaram','MG Road','Gandhibazar','Vijaynagar']},
+  {name:'Adventure',desc:'Adventure and thrill.',places:['Loco Bear','Area 83','Jungle Trailz','Mango Mist','Kerekud']},
+  {name:'Night Life',desc:'Bangalore nightlife.',places:['Commercial Street','UB City','Drive to Airport','VV Puram']},
+  {name:'Long Drive',desc:'Long drive options.',places:['Mysore','Chitradurga','Kolar','Kanakapura']},
+  {name:'Waterfall',desc:'Waterfall day trip.',places:['Shivanasamudra','Jog Falls','Sathodi','Hogenakkal','Sakaleshpura']}
 ];
 
 const themeDiv=document.getElementById('theme-list');
@@ -60,6 +63,8 @@ const placeDiv=document.getElementById('place-list');
 const placeDivContainer=document.getElementById('place-list-div');
 const confirmation=document.getElementById('confirmation');
 const finalMsg=document.getElementById('final-msg');
+const pageTitle=document.getElementById('page-title');
+const themeDesc=document.getElementById('theme-desc');
 let currentTheme=null;
 
 // Load themes
@@ -81,6 +86,8 @@ function showPlaces(i){
     btn.onclick=()=>showConfirm(p);
     placeDiv.appendChild(btn);
   });
+  themeDesc.innerText = themes[i].desc;
+  pageTitle.classList.add('hidden'); // hide "Choose Your Trip Theme"
 }
 
 function showConfirm(place){
@@ -92,11 +99,13 @@ function showConfirm(place){
 function goBack(){
   placeDivContainer.classList.add('hidden');
   themeDiv.classList.remove('hidden');
+  pageTitle.classList.remove('hidden'); // show the page title again
 }
 
 function restart(){
   confirmation.classList.add('hidden');
   themeDiv.classList.remove('hidden');
+  pageTitle.classList.remove('hidden');
 }
 </script>
 </body>
