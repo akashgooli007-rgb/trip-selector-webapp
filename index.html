@@ -30,8 +30,11 @@ h2{color:#6a11cb;}
 .grid {display:grid;gap:10px;margin-top:15px;}
 button {padding:10px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:0.2s;}
 button:hover {transform:scale(1.05);}
+button.back-btn {font-size:0.85em;margin-top:15px;}
 .hidden {display:none;}
-.description {margin-bottom:10px;color:#333;font-size:0.9em;text-align:center;}
+.theme-name {font-weight:bold;font-size:1.1em;margin-bottom:5px;text-align:center;}
+.theme-desc {font-size:0.95em;text-align:center;margin-bottom:10px;}
+#confirmation p.notice {font-size:0.85em;font-weight:bold;margin:10px 0;}
 </style>
 </head>
 <body>
@@ -41,16 +44,17 @@ button:hover {transform:scale(1.05);}
   <div id="theme-list" class="grid"></div>
 
   <div id="place-list-div" class="hidden">
-    <p id="theme-desc" class="description"></p>
+    <div class="theme-name" id="theme-name"></div>
+    <div class="theme-desc" id="theme-desc"></div>
     <h2>Select Place</h2>
     <div id="place-list" class="grid"></div>
-    <button onclick="goBack()">Back</button>
+    <button onclick="goBack()" class="back-btn">Back</button>
   </div>
 
   <div id="confirmation" class="hidden">
     <h2>🎉 Ready!</h2>
     <p id="final-msg"></p>
-    <p style="font-size:0.85em;font-weight:bold;margin:10px 0;">Please share this screenshot via WhatsApp to get complete itinerary.</p>
+    <p class="notice">Please share this screenshot via WhatsApp to get complete itinerary.</p>
     <button onclick="restart()">Start Over</button>
   </div>
 </div>
@@ -73,6 +77,7 @@ const placeDivContainer=document.getElementById('place-list-div');
 const confirmation=document.getElementById('confirmation');
 const finalMsg=document.getElementById('final-msg');
 const pageTitle=document.getElementById('page-title');
+const themeName=document.getElementById('theme-name');
 const themeDesc=document.getElementById('theme-desc');
 let currentTheme=null;
 
@@ -95,7 +100,8 @@ function showPlaces(i){
     btn.onclick=()=>showConfirm(p);
     placeDiv.appendChild(btn);
   });
-  themeDesc.innerText = `${themes[i].name} : ${themes[i].desc}`;
+  themeName.innerText = themes[i].name;
+  themeDesc.innerText = themes[i].desc;
   pageTitle.classList.add('hidden'); // hide "Choose Your Trip Theme"
 }
 
