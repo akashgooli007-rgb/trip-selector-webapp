@@ -5,7 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trip Selector</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+/* Self-hosted Luckiest Guy font */
+@font-face {
+  font-family: 'Luckiest Guy';
+  src: url('fonts/LuckiestGuy-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg,#6a11cb,#2575fc,#ff6a00,#ffcc00);
@@ -61,38 +68,22 @@ button.back-btn {font-size:0.85em;margin-top:15px;}
 
 <script>
 const themes=[
-  {name:'Temple Visit',
-   desc:'Where humanity meets divinity. Akash thanks for understanding me and including this option for spiritual Friday.',
-   places:['Isha Foundation Chikkaballapur','Sri Venugopalaswamy Temple - KRS','Devarayanadurga - Tumkur','Art of living - Kanakapura road','Govardhana temple - Basavanagudi']
-  },
-  {name:'Mall Visits',
-   desc:'No Akash, temples we can visit later and God is always kind to us. Suggest some good malls so that we can eat, talk and watch movie.',
-   places:['Forum Mall','Mall of Asia','Phoenix Marketcity','Nexus Mall']
-  },
-  {name:'Cafes & Restaurants',
-   desc:'Akash we are in Bangalore and it would be crime not to visit amazing cafes.',
-   places:['Duy Art Cafe','Ironhill','Bologna','Si Nonnas','Tiot/Drunken Daddy']
-  },
-  {name:'Old Bangalore',
-   desc:'Enough is enough. Naanu mysore hudugi so I am interested in traditional old Bangalore vibes.',
-   places:['Jayanagar','Malleshwaram','MG Road','Gandhibazar','Vijaynagar']
-  },
-  {name:'Adventure and Theme Park',
-   desc:"It's Friday Akash. Looking for some adventure and thrill.",
-   places:['Loco Bear','Area 83','Jungle Trailz','Mango Mist','Kerekud homestay']
-  },
-  {name:'Night Life',
-   desc:'Kelsa aadhmele we shall go out. I know Bangalore is open 24x7.',
-   places:['Commercial Street','UB City','Drive to Airport','VV Puram']
-  },
-  {name:'Long Drive',
-   desc:'Akash avare teach me car driving I already have licence.',
-   places:['Towards Mysore','Towards Chitradurga','Towards Kolar','Towards Kanakapura']
-  },
-  {name:'Waterfall',
-   desc:'Ree mungaru male nodilva neevu. I want constant talk in car along with Mr.Devadas(rabbit) to reach nearby waterfall.',
-   places:['Shivanasamudra','Jog Falls','Sathodi','Hogenakkal','Sakaleshpura']
-  }
+  {name:'Temple Visit', desc:'Where humanity meets divinity. Akash thanks for understanding me and including this option for spiritual Friday.',
+   places:['Isha Foundation Chikkaballapur','Sri Venugopalaswamy Temple - KRS','Devarayanadurga - Tumkur','Art of living - Kanakapura road','Govardhana temple - Basavanagudi']},
+  {name:'Mall Visits', desc:'No Akash, temples we can visit later and God is always kind to us. Suggest some good malls so that we can eat, talk and watch movie.',
+   places:['Forum Mall','Mall of Asia','Phoenix Marketcity','Nexus Mall']},
+  {name:'Cafes & Restaurants', desc:'Akash we are in Bangalore and it would be crime not to visit amazing cafes.',
+   places:['Duy Art Cafe','Ironhill','Bologna','Si Nonnas','Tiot/Drunken Daddy']},
+  {name:'Old Bangalore', desc:'Enough is enough. Naanu mysore hudugi so I am interested in traditional old Bangalore vibes.',
+   places:['Jayanagar','Malleshwaram','MG Road','Gandhibazar','Vijaynagar']},
+  {name:'Adventure and Theme Park', desc:"It's Friday Akash. Looking for some adventure and thrill.",
+   places:['Loco Bear','Area 83','Jungle Trailz','Mango Mist','Kerekud homestay']},
+  {name:'Night Life', desc:'Kelsa aadhmele we shall go out. I know Bangalore is open 24x7.',
+   places:['Commercial Street','UB City','Drive to Airport','VV Puram']},
+  {name:'Long Drive', desc:'Akash avare teach me car driving I already have licence.',
+   places:['Towards Mysore','Towards Chitradurga','Towards Kolar','Towards Kanakapura']},
+  {name:'Waterfall', desc:'Ree mungaru male nodilva neevu. I want constant talk in car along with Mr.Devadas(rabbit) to reach nearby waterfall.',
+   places:['Shivanasamudra','Jog Falls','Sathodi','Hogenakkal','Sakaleshpura']}
 ];
 
 const themeDiv=document.getElementById('theme-list');
@@ -105,7 +96,6 @@ const themeName=document.getElementById('theme-name');
 const themeDesc=document.getElementById('theme-desc');
 let currentTheme=null;
 
-// Load themes
 themes.forEach((t,i)=>{
   let btn=document.createElement('button');
   btn.innerText=t.name;
@@ -126,7 +116,7 @@ function showPlaces(i){
   });
   themeName.innerText = themes[i].name;
   themeDesc.innerText = themes[i].desc;
-  pageTitle.classList.add('hidden'); // hide "Choose Your Trip Theme"
+  pageTitle.classList.add('hidden');
 }
 
 function showConfirm(place){
@@ -138,7 +128,7 @@ function showConfirm(place){
 function goBack(){
   placeDivContainer.classList.add('hidden');
   themeDiv.classList.remove('hidden');
-  pageTitle.classList.remove('hidden'); // show the page title again
+  pageTitle.classList.remove('hidden');
 }
 
 function restart(){
