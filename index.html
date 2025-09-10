@@ -1,149 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun Trip Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto+Slab&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
-        }
-
-        .theme-card {
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .theme-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .floating-character, .butterfly {
-            position: absolute;
-            width: 50px;
-            animation: float 5s ease-in-out infinite;
-        }
-
-        .butterfly {
-            animation: fly 8s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes fly {
-            0% { transform: translate(0,0) rotate(0deg); }
-            25% { transform: translate(30px,-30px) rotate(20deg); }
-            50% { transform: translate(-20px,-50px) rotate(-20deg); }
-            75% { transform: translate(30px,20px) rotate(10deg); }
-            100% { transform: translate(0,0) rotate(0deg); }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trip Selector</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#6a11cb,#2575fc,#ff6a00,#ffcc00);
+  background-size: 400% 400%;
+  animation: bgAnim 15s ease infinite;
+  display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0;
+}
+@keyframes bgAnim {
+  0% {background-position:0% 50%;}
+  50% {background-position:100% 50%;}
+  100% {background-position:0% 50%;}
+}
+.container {background:white;padding:20px;border-radius:15px;width:90%;max-width:400px;}
+h1,h2{color:#6a11cb;text-align:center;}
+.grid {display:grid;gap:10px;margin-top:15px;}
+button {padding:10px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:0.2s;}
+button:hover {transform:scale(1.05);}
+.hidden {display:none;}
+</style>
 </head>
+<body>
+<div class="container">
+  <h1>Choose Your Trip Theme</h1>
+  <div id="theme-list" class="grid"></div>
 
-<body class="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 min-h-screen relative overflow-hidden">
+  <div id="place-list-div" class="hidden">
+    <h2>Select Place</h2>
+    <div id="place-list" class="grid"></div>
+    <button onclick="goBack()">Back</button>
+  </div>
 
-    <!-- Floating characters -->
-    <img src="https://i.ibb.co/9Z0B2Q5/bird.png" class="floating-character top-10 left-10" />
-    <img src="https://i.ibb.co/Yt6v2Mz/cloud.png" class="floating-character top-20 right-20" />
-    <img src="https://i.ibb.co/9Z0B2Q5/bird.png" class="floating-character top-40 left-32" />
-    <img src="https://i.ibb.co/Yt6v2Mz/cloud.png" class="floating-character top-60 right-10" />
-    <img src="https://i.ibb.co/9Z0B2Q5/bird.png" class="floating-character top-80 left-60" />
-    <img src="https://i.ibb.co/7r0f4N8/butterfly.png" class="butterfly top-30 left-50" />
-    <img src="https://i.ibb.co/7r0f4N8/butterfly.png" class="butterfly top-50 right-40" />
+  <div id="confirmation" class="hidden">
+    <h2>🎉 Ready!</h2>
+    <p id="final-msg"></p>
+    <button onclick="restart()">Start Over</button>
+  </div>
+</div>
 
-    <div id="main-container" class="relative z-10 flex items-center justify-center min-h-screen">
-        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-md w-full">
-            <h1 class="text-3xl font-bold text-center mb-6 text-purple-700">Choose Your Trip Theme 🌟</h1>
-            <div id="theme-list" class="grid gap-4"></div>
-            <div id="place-selection" class="hidden mt-4">
-                <h2 class="text-2xl font-bold text-center mb-4 text-pink-700">Select a Place 🗺️</h2>
-                <div id="places-list" class="grid gap-4"></div>
-            </div>
-            <div id="confirmation" class="hidden text-center mt-6">
-                <h2 class="text-2xl font-bold text-purple-800">🎉 Ready for the Trip!</h2>
-                <p id="final-message" class="mt-2 text-lg"></p>
-                <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition">Start Over</button>
-            </div>
-        </div>
-    </div>
+<script>
+const themes=[
+  {name:'Temple Visit',places:['Isha Foundation','Sri Venugopalaswamy','Devarayanadurga','Art of living','Govardhana']},
+  {name:'Mall Visits',places:['Forum Mall','Mall of Asia','Phoenix Marketcity','Nexus Mall']},
+  {name:'Cafes & Restaurants',places:['Duy Art Cafe','Ironhill','Bologna','Si Nonnas','Tiot/Drunken Daddy']},
+  {name:'Old Bangalore',places:['Jayanagar','Malleshwaram','MG Road','Gandhibazar','Vijaynagar']},
+  {name:'Adventure',places:['Loco Bear','Area 83','Jungle Trailz','Mango Mist','Kerekud']},
+  {name:'Night Life',places:['Commercial Street','UB City','Drive to Airport','VV Puram']},
+  {name:'Long Drive',places:['Mysore','Chitradurga','Kolar','Kanakapura']},
+  {name:'Waterfall',places:['Shivanasamudra','Jog Falls','Sathodi','Hogenakkal','Sakaleshpura']}
+];
 
-    <audio id="notification-sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
+const themeDiv=document.getElementById('theme-list');
+const placeDiv=document.getElementById('place-list');
+const placeDivContainer=document.getElementById('place-list-div');
+const confirmation=document.getElementById('confirmation');
+const finalMsg=document.getElementById('final-msg');
+let currentTheme=null;
 
-    <script>
-        const themes = [
-            { name: 'Temple Visit', desc: 'Where humanity meets divinity.', places: [
-                'Isha Foundation Chikkaballapur 100mins drive. 6:30am to 1:00pm, 2:30pm to 8pm laser show.',
-                'Sri Venugopalaswamy temple KRS Mysore. 7am to 4pm',
-                'Devarayanadurga and Mahalaxmi temple. (Mane devaru) 8am to 4pm',
-                'Wondering something in BLR Art of living Kanakapura road. 8am to 12pm',
-                'Govardhana temple - Omkar hills - Malleshwaram temple - Venkateswara temple'
-            ]},
-            { name: 'Mall Visits', desc: 'No Akash, temples we can visit later and God is always kind to us.', places: [
-                'Forum Mall','Mall of Asia','Pheonix Marketcity','Nexus mall Whitefield'
-            ]},
-            { name: 'Cafes & Restaurants', desc: 'Akash we are in Bangalore and it would be crime not to visit amazing cafes.', places: [
-                'Duy art cafe Indiranagar','Ironhill Marathahalli','Bologna - italian cafe','Si nonnas - Pizza','Tiot or Drunken daddy (dance floor)'
-            ]},
-            { name: 'Old Bangalore Visit', desc: 'Enough is enough. Naanu mysore hudugi so I am interested in traditional old Bangalore vibes.', places: [
-                'Jayanagar','Malleshwaram','MG road/ BLR Central','Gandhibazar','Vijaynagar'
-            ]},
-            { name: 'Adventure & Theme Park', desc: 'It\'s Friday Akash. Looking for some adventure and thrill.', places: [
-                'Loco bear','Area 83','Jungle trailz','Mango mist resort','Kerekud homestay'
-            ]},
-            { name: 'Night Life', desc: 'Kelsa aadhmele we shall go out. I know Bangalore is open 24x7', places: [
-                'Commercial Street','UB City along with Church Street','Drive to BLR airport and have a cup of coffee','VV Puram food Street'
-            ]},
-            { name: 'Only Long Drive', desc: 'Akash avare teach me car driving I already have licence.', places: [
-                'Towards Mysore/coorg','Towards chitradurga','Towards Kolar','Towards Kanakapura'
-            ]},
-            { name: 'Waterfall', desc: 'Ree mungaru male nodilva neevu. I want contant talk in car along with devadasa to reach nearby waterfall.', places: [
-                'Shivanasamudra - gaganachukki','Jog falls','Sathodi falls','Hogenakkal falls','Sakaleshpura'
-            ]}
-        ];
+// Load themes
+themes.forEach((t,i)=>{
+  let btn=document.createElement('button');
+  btn.innerText=t.name;
+  btn.onclick=()=>showPlaces(i);
+  themeDiv.appendChild(btn);
+});
 
-        const themeListDiv = document.getElementById('theme-list');
-        const placesListDiv = document.getElementById('places-list');
-        const placeSelectionDiv = document.getElementById('place-selection');
-        const confirmationDiv = document.getElementById('confirmation');
-        const finalMessage = document.getElementById('final-message');
-        const notificationSound = document.getElementById('notification-sound');
+function showPlaces(i){
+  currentTheme=i;
+  themeDiv.classList.add('hidden');
+  placeDivContainer.classList.remove('hidden');
+  placeDiv.innerHTML='';
+  themes[i].places.forEach(p=>{
+    let btn=document.createElement('button');
+    btn.innerText=p;
+    btn.onclick=()=>showConfirm(p);
+    placeDiv.appendChild(btn);
+  });
+}
 
-        themes.forEach((theme, index) => {
-            const card = document.createElement('div');
-            card.className = 'theme-card p-4 rounded-xl shadow cursor-pointer text-white text-lg font-bold';
-            card.style.background = `linear-gradient(135deg, hsl(${Math.random()*360},70%,60%), hsl(${Math.random()*360},70%,70%))`;
-            card.innerHTML = `<h3>${theme.name}</h3><p class='text-sm font-normal mt-1'>${theme.desc}</p>`;
-            card.onclick = () => showPlaces(index);
-            themeListDiv.appendChild(card);
-        });
+function showConfirm(place){
+  placeDivContainer.classList.add('hidden');
+  confirmation.classList.remove('hidden');
+  finalMsg.innerText=`Awesome! We are heading to "${place}" under "${themes[currentTheme].name}". Get ready!`;
+}
 
-        function showPlaces(themeIndex) {
-            themeListDiv.classList.add('hidden');
-            placeSelectionDiv.classList.remove('hidden');
-            placesListDiv.innerHTML = '';
-            const theme = themes[themeIndex];
-            theme.places.forEach(place => {
-                const placeBtn = document.createElement('button');
-                placeBtn.className = 'w-full bg-pink-400 p-3 rounded shadow hover:bg-pink-500 transition font-bold';
-                placeBtn.innerText = place;
-                placeBtn.onclick = () => showConfirmation(theme.name, place);
-                placesListDiv.appendChild(placeBtn);
-            });
-        }
+function goBack(){
+  placeDivContainer.classList.add('hidden');
+  themeDiv.classList.remove('hidden');
+}
 
-        function showConfirmation(themeName, placeName) {
-            placeSelectionDiv.classList.add('hidden');
-            confirmationDiv.classList.remove('hidden');
-            finalMessage.innerText = `Awesome choice! We are heading towards "${placeName}" under the theme "${themeName}". Get ready 😊`;
-            notificationSound.play();
-        }
-    </script>
+function restart(){
+  confirmation.classList.add('hidden');
+  themeDiv.classList.remove('hidden');
+}
+</script>
 </body>
 </html>
