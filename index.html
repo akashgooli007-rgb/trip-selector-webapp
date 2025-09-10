@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trip Selector</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
 body {
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg,#6a11cb,#2575fc,#ff6a00,#ffcc00);
@@ -18,7 +19,13 @@ body {
   100% {background-position:0% 50%;}
 }
 .container {background:white;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:center;}
-h1,h2{color:#6a11cb;}
+h1,h2{color:#6a11cb;margin:10px 0;}
+#headline {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 2em;
+  color: #ff4081;
+  text-shadow: 2px 2px 5px #fff;
+}
 .grid {display:grid;gap:10px;margin-top:15px;}
 button {padding:10px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:0.2s;}
 button:hover {transform:scale(1.05);}
@@ -28,8 +35,8 @@ button:hover {transform:scale(1.05);}
 </head>
 <body>
 <div class="container">
-  <h2>Day out with Akash!!!</h2>
-  <h1 id="page-title">Choose Your Trip Theme</h1>
+  <h1 id="headline">Day out with Akash!!!</h1>
+  <h2 id="page-title">Choose Your Trip Theme</h2>
   <div id="theme-list" class="grid"></div>
 
   <div id="place-list-div" class="hidden">
@@ -48,14 +55,14 @@ button:hover {transform:scale(1.05);}
 
 <script>
 const themes=[
-  {name:'Temple Visit',desc:'Where humanity meets divinity.',places:['Isha Foundation','Sri Venugopalaswamy','Devarayanadurga','Art of living','Govardhana']},
-  {name:'Mall Visits',desc:'Visit malls to eat, talk and watch movies.',places:['Forum Mall','Mall of Asia','Phoenix Marketcity','Nexus Mall']},
-  {name:'Cafes & Restaurants',desc:'Explore amazing cafes in Bangalore.',places:['Duy Art Cafe','Ironhill','Bologna','Si Nonnas','Tiot/Drunken Daddy']},
-  {name:'Old Bangalore',desc:'Traditional old Bangalore vibes.',places:['Jayanagar','Malleshwaram','MG Road','Gandhibazar','Vijaynagar']},
-  {name:'Adventure',desc:'Adventure and thrill.',places:['Loco Bear','Area 83','Jungle Trailz','Mango Mist','Kerekud']},
-  {name:'Night Life',desc:'Bangalore nightlife.',places:['Commercial Street','UB City','Drive to Airport','VV Puram']},
-  {name:'Long Drive',desc:'Long drive options.',places:['Mysore','Chitradurga','Kolar','Kanakapura']},
-  {name:'Waterfall',desc:'Waterfall day trip.',places:['Shivanasamudra','Jog Falls','Sathodi','Hogenakkal','Sakaleshpura']}
+  {name:'Temple Visit',desc:'Where humanity meets divinity. Akash thanks for understanding me and including this option for spiritual Friday.',places:['Isha Foundation','Sri Venugopalaswamy','Devarayanadurga','Art of living','Govardhana']},
+  {name:'Mall Visits',desc:'No Akash, temples we can visit later and God is always kind to us. Suggest some good malls so that we can eat, talk and watch movie.',places:['Forum Mall','Mall of Asia','Phoenix Marketcity','Nexus Mall']},
+  {name:'Cafes & Restaurants',desc:'Akash we are in Bangalore and it would be crime not to visit amazing cafes.',places:['Duy Art Cafe','Ironhill','Bologna','Si Nonnas','Tiot/Drunken Daddy']},
+  {name:'Old Bangalore',desc:'Enough is enough. Naanu mysore hudugi so I am interested in traditional old Bangalore vibes.',places:['Jayanagar','Malleshwaram','MG Road','Gandhibazar','Vijaynagar']},
+  {name:'Adventure',desc:"It's Friday Akash. Looking for some adventure and thrill.",places:['Loco Bear','Area 83','Jungle Trailz','Mango Mist','Kerekud']},
+  {name:'Night Life',desc:'Bangalore Kelsa aadhmele we shall go out. I know Bangalore is open 24x7. Okay madam.',places:['Commercial Street','UB City','Drive to Airport','VV Puram']},
+  {name:'Long Drive',desc:'Akash avare teach me car driving I already have licence.',places:['Mysore','Chitradurga','Kolar','Kanakapura']},
+  {name:'Waterfall',desc:'Ree mungaru male nodilva neevu. I want constant talk in car along with Mr.Devadas(rabbit) to reach nearby waterfall.',places:['Shivanasamudra','Jog Falls','Sathodi','Hogenakkal','Sakaleshpura']}
 ];
 
 const themeDiv=document.getElementById('theme-list');
