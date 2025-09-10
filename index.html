@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Trip Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-2xl font-bold text-center mb-4">Choose Your Trip Theme 🌟</h1>
+        <div id="theme-list" class="grid gap-4">
+            <!-- Theme Cards Injected by JS -->
+        </div>
+        <div id="place-selection" class="hidden mt-4">
+            <h2 class="text-xl font-semibold text-center mb-4">Select a Place 🗺️</h2>
+            <div id="places-list" class="grid gap-4"></div>
+        </div>
+        <div id="confirmation" class="hidden text-center mt-6">
+            <h2 class="text-xl font-semibold">🎉 Ready for the Trip!</h2>
+            <p id="final-message" class="mt-2"></p>
+            <button onclick="location.reload()"
+                class="mt-4 px-4 py-2 bg-purple-500 text-white rounded">Start Over</button>
+        </div>
+    </div>
+
+    <script>
+        const themes = [
+            {
+                name: 'Temple Visit',
+                desc: 'Where humanity meets divinity.',
+                places: [
+                    'Isha Foundation Chikkaballapur',
+                    'Sri Venugopalaswamy Temple KRS Mysore',
+                    'Devarayanadurga and Mahalaxmi Temple',
+                    'Art of Living, Kanakapura Road',
+                    'Chain of Temples in Bangalore'
+                ]
+            },
+            {
+                name: 'Mall Visits',
+                desc: 'Good malls to eat, talk and watch movie.',
+                places: [
+                    'Forum Mall', 'Mall of Asia', 'Phoenix Marketcity', 'Nexus Mall Whitefield'
+                ]
+            },
+            {
+                name: 'Cafes & Restaurants',
+                desc: 'Amazing Bangalore cafes to chill.',
+                places: [
+                    'Duy Art Cafe', 'Ironhill Marathahalli', 'Bologna Italian Cafe', 'Si Nonna Pizza', 'Tiot / Drunken Daddy'
+                ]
+            },
+            {
+                name: 'Old Bangalore Visit',
+                desc: 'Traditional old Bangalore vibes.',
+                places: [
+                    'Jayanagar', 'Malleshwaram', 'MG Road / BLR Central', 'Gandhibazar', 'Vijaynagar'
+                ]
+            },
+            {
+                name: 'Adventure & Theme Park',
+                desc: 'Looking for adventure and thrill.',
+                places: [
+                    'Loco Bear', 'Area 83', 'Jungle Trailz', 'Mango Mist Resort', 'Kerekud Homestay'
+                ]
+            },
+            {
+                name: 'Night Life',
+                desc: 'Explore Bangalore after dark.',
+                places: [
+                    'Commercial Street', 'UB City & Church Street', 'Drive to BLR Airport', 'VV Puram Food Street'
+                ]
+            },
+            {
+                name: 'Long Drive',
+                desc: 'Just a peaceful long drive.',
+                places: [
+                    'Towards Mysore / Coorg', 'Chitradurga', 'Kolar', 'Kanakapura'
+                ]
+            },
+            {
+                name: 'Waterfalls',
+                desc: 'Chill and enjoy waterfall vibes.',
+                places: [
+                    'Shivanasamudra - Gaganachukki', 'Jog Falls', 'Sathodi Falls', 'Hogenakkal Falls', 'Sakaleshpura'
+                ]
+            },
+        ];
+
+        const themeListDiv = document.getElementById('theme-list');
+        const placesListDiv = document.getElementById('places-list');
+        const placeSelectionDiv = document.getElementById('place-selection');
+        const confirmationDiv = document.getElementById('confirmation');
+        const finalMessage = document.getElementById('final-message');
+
+        themes.forEach((theme, index) => {
+            const card = document.createElement('div');
+            card.className = 'bg-indigo-100 p-4 rounded shadow cursor-pointer hover:bg-indigo-200';
+            card.innerHTML = `<h3 class='font-semibold text-lg'>${theme.name}</h3><p class='text-sm text-gray-700'>${theme.desc}</p>`;
+            card.onclick = () => {
+                showPlaces(index);
+            };
+            themeListDiv.appendChild(card);
+        });
+
+        function showPlaces(themeIndex) {
+            themeListDiv.classList.add('hidden');
+            placeSelectionDiv.classList.remove('hidden');
+            placesListDiv.innerHTML = '';
+            const theme = themes[themeIndex];
+
+            theme.places.forEach(place => {
+                const placeBtn = document.createElement('button');
+                placeBtn.className = 'w-full bg-pink-300 p-3 rounded shadow hover:bg-pink-400';
+                placeBtn.innerText = place;
+                placeBtn.onclick = () => showConfirmation(theme.name, place);
+                placesListDiv.appendChild(placeBtn);
+            });
+        }
+
+        function showConfirmation(themeName, placeName) {
+            placeSelectionDiv.classList.add('hidden');
+            confirmationDiv.classList.remove('hidden');
+            finalMessage.innerText = `Awesome choice! We are heading towards "${placeName}" under the theme "${themeName}". Get ready 😊`;
+        }
+    </script>
+</body>
+
+</html>
