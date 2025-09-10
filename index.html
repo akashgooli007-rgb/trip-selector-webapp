@@ -19,30 +19,31 @@ body {
   100% {background-position:0% 50%;}
 }
 .container {background:white;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:center;}
-h1,h2{color:#6a11cb;margin:10px 0;}
+h1,h2{margin:10px 0;}
 #headline {
   font-family: 'Luckiest Guy', cursive;
   font-size: 2em;
-  color: #ff4081;
-  text-shadow: 2px 2px 5px #fff;
 }
+#headline span.main {color:brown;}
+#headline span.akash {color:green;}
+h2{color:#6a11cb;}
 .grid {display:grid;gap:10px;margin-top:15px;}
 button {padding:10px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:0.2s;}
 button:hover {transform:scale(1.05);}
 .hidden {display:none;}
-.description {margin-top:10px;color:#333;font-size:0.9em;}
+.description {margin-bottom:10px;color:#333;font-size:0.9em;text-align:center;}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1 id="headline">Day out with Akash!!!</h1>
+  <h1 id="headline"><span class="main">Day out with </span><span class="akash">Akash!!!</span></h1>
   <h2 id="page-title">Choose Your Trip Theme</h2>
   <div id="theme-list" class="grid"></div>
 
   <div id="place-list-div" class="hidden">
+    <p id="theme-desc" class="description"></p>
     <h2>Select Place</h2>
     <div id="place-list" class="grid"></div>
-    <p id="theme-desc" class="description"></p>
     <button onclick="goBack()">Back</button>
   </div>
 
@@ -93,7 +94,7 @@ function showPlaces(i){
     btn.onclick=()=>showConfirm(p);
     placeDiv.appendChild(btn);
   });
-  themeDesc.innerText = themes[i].desc;
+  themeDesc.innerText = `${themes[i].name} : ${themes[i].desc}`;
   pageTitle.classList.add('hidden'); // hide "Choose Your Trip Theme"
 }
 
